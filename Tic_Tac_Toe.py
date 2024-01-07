@@ -1,5 +1,4 @@
 import pygame
-import random
 
 pygame.init()
 
@@ -9,8 +8,10 @@ SCREEN_HEIGHT = 399
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 isrunning = True
-
 ispressed = False
+
+# List to store the positions of clicked circles
+clicked_circles = []
 
 while isrunning:
     for event in pygame.event.get():
@@ -20,7 +21,7 @@ while isrunning:
             ispressed = True
         if event.type == pygame.MOUSEBUTTONUP:
             ispressed = False
-
+    
     screen.fill("black")
 
     # Draw Logic Squares:
@@ -34,11 +35,15 @@ while isrunning:
     pygame.draw.line(screen, "white", (0, 133), (399, 133), 5)
     pygame.draw.line(screen, "white", (0, 266), (399, 266), 5)
 
-    for rect in rects:
-        if ispressed:
+    # Draw the clicked circles
+    for circle_pos in clicked_circles:
+        pygame.draw.circle(screen, "white", circle_pos, 50, 5)
+
+    # Draw the current circle if the mouse button is pressed
+    if ispressed:
+        for rect in rects:
             if rect.collidepoint(pygame.mouse.get_pos()):
-                center = rect.center
-                pygame.draw.circle(screen, "white", center, 50, 5)
+                clicked_circles.append(rect.center)
 
     pygame.display.flip()
 
