@@ -47,7 +47,7 @@ class TicTacToe:
 
         self.win_screen = Button(self.screen, self.SCREEN_WIDTH / 2 - 150, self.SCREEN_HEIGHT / 2 - 100, self.win_img, 300, 100)
         self.lose_screen = Button(self.screen, self.SCREEN_WIDTH / 2 - 150, self.SCREEN_HEIGHT / 2 - 100, self.lose_img, 300, 100)
-        self.draw_screen = Button(self.screen, self.SCREEN_WIDTH / 2 - 150, self.SCREEN_HEIGHT / 2 - 100, self.draw_img, 300, 100)
+        self.draw_screen = Button(self.screen, self.SCREEN_WIDTH / 2 - 150, self.SCREEN_HEIGHT / 2 - 100, self.draw_img, 350, 100)
 
     def check_winner(self):
         for i in range(3):
@@ -62,9 +62,17 @@ class TicTacToe:
             return "Computer wins!"
 
         return None
+    
+    def check_draw(self):
+        # Check if all positions are filled and there is no winner
+        if all(self.board[i][j] != '' for i in range(3) for j in range(3)) and self.check_winner() == None:
+            return "It's a draw!"
+        else:
+            return None
 
     def game_over(self):
         winner = self.check_winner()
+        draw = self.check_draw()
         if winner:
             pygame.draw.rect(self.screen, "black", (0, 0, self.SCREEN_HEIGHT, self.SCREEN_WIDTH))
             # Display game over image
@@ -72,8 +80,10 @@ class TicTacToe:
                 self.win_screen.draw()
             elif winner == "Computer wins!":
                 self.lose_screen.draw()
-            else:
-                self.draw_screen.draw()
+    
+        elif draw == "It's a draw!":
+            pygame.draw.rect(self.screen, "black", (0, 0, self.SCREEN_HEIGHT, self.SCREEN_WIDTH))
+            self.draw_screen.draw()
 
             # Display restart button
             if self.restart_button.draw():
