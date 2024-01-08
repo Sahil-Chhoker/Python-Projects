@@ -17,8 +17,11 @@ clicked_circles = []
 # List to store the positions of computer's crosses
 computer_clicked_crosses = []
 
+# Variable to store the time when the player drew the circle
+player_turn_time = 0
+
 def check_winner():
-    # Add logic to check for a winner or a tie
+    
     pass
 
 while isrunning:
@@ -29,6 +32,7 @@ while isrunning:
             ispressed = True
         if event.type == pygame.MOUSEBUTTONUP and player_turn:
             ispressed = False
+            player_turn_time = pygame.time.get_ticks()
     
     screen.fill("black")
 
@@ -58,9 +62,10 @@ while isrunning:
                 clicked_circles.append(rect.center)
                 player_turn = False
                 ispressed = False
+                player_turn_time = pygame.time.get_ticks()
 
-    # Computer's Turn
-    if not player_turn:
+    # Computer's Turn with Delay
+    if not player_turn and pygame.time.get_ticks() - player_turn_time > 1000:  # Wait for 1000 milliseconds (1 second)
         # Implement logic for the computer's move
         available_rects = [rect for rect in rects if rect.center not in clicked_circles and rect.center not in computer_clicked_crosses]
         if available_rects:
