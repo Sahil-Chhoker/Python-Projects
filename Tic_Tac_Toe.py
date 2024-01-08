@@ -17,29 +17,23 @@ clicked_circles = []
 # List to store the positions of computer's crosses
 computer_clicked_crosses = []
 
-def check_winner():
-    if len(clicked_circles) < 3:
-        return None
-    all_moves = clicked_circles + computer_clicked_crosses
-
-    # Check for player's win
-    for line in [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]]:
-        symbols = [all_moves[i] if i < len(all_moves) else None for i in line]
-        if all(symbol == (255, 255, 255) for symbol in symbols if symbol is not None):
+def check_winner(board):
+    # Check rows, columns, and diagonals for a winner
+    for i in range(3):
+        if all(board[i][j] == 'O' for j in range(3)) or all(board[j][i] == 'O' for j in range(3)):
             return "Player wins!"
-
-    # Check for computer's win
-    for line in [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]]:
-        symbols = [all_moves[i] if i < len(all_moves) else None for i in line]
-        if all(symbol == (255, 0, 0) for symbol in symbols if symbol is not None):
+        elif all(board[i][j] == 'X' for j in range(3)) or all(board[j][i] == 'X' for j in range(3)):
             return "Computer wins!"
 
-    if len(all_moves) == 9:
-        return "It's a tie!"
+    if board[0][0] == board[1][1] == board[2][2] == 'O' or board[0][2] == board[1][1] == board[2][0] == 'O':
+        return "Player wins!"
+    elif board[0][0] == board[1][1] == board[2][2] == 'X' or board[0][2] == board[1][1] == board[2][0] == 'X':
+        return "Computer wins!"
 
     return None
 
-
+# Initialize an empty 3x3 game board
+board = [['' for _ in range(3)] for _ in range(3)]
 
 while isrunning:
     for event in pygame.event.get():
@@ -77,6 +71,10 @@ while isrunning:
                 ispressed = False
                 player_turn_time = pygame.time.get_ticks()
 
+                # Update the game board with player's move
+                row, col = rect.center[1] // 133, rect.center[0] // 133
+                board[row][col] = 'O'
+
     if not player_turn and pygame.time.get_ticks() - player_turn_time > 1000:
         available_rects = [rect for rect in rects if rect.center not in clicked_circles and rect.center not in computer_clicked_crosses]
         if available_rects:
@@ -84,10 +82,15 @@ while isrunning:
             computer_clicked_crosses.append(chosen_rect.center)
             player_turn = True
 
-    # winner = check_winner()
-    # if winner:
-    #     print(winner)
-    #     # isrunning = False
+            # Update the game board with computer's move
+            row, col = chosen_rect.center[1] // 133, chosen_rect.center[0] // 133
+            board[row][col] = 'X'
+
+    winner = check_winner(board)
+    if winner:
+        print(winner)
+        
+        isrunning = False
 
     pygame.display.flip()
 
