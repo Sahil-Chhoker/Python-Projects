@@ -1,98 +1,148 @@
 import pygame
 import random
-import button
 
-pygame.init()
+class Button:
+    def __init__(self, surface, x, y, image, size_x, size_y):
+        self.image = pygame.transform.scale(image, (size_x, size_y))
+        self.rect = self.image.get_rect()
+        self.rect.topleft = (x, y)
+        self.clicked = False
+        self.surface = surface
 
-SCREEN_WIDTH = 399
-SCREEN_HEIGHT = 399
+    def draw(self):
+        action = False
 
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        pos = pygame.mouse.get_pos()
 
-player_turn = True
-isrunning = True
-ispressed = False
+        if self.rect.collidepoint(pos):
+            if pygame.mouse.get_pressed()[0] == 1 and not self.clicked:
+                action = True
+                self.clicked = True
 
-# List to store the positions of clicked circles (player's moves)
-clicked_circles = []
-# List to store the positions of computer's crosses
-computer_clicked_crosses = []
+        if pygame.mouse.get_pressed()[0] == 0:
+            self.clicked = False
 
-def check_winner(board):
-    # Check rows, columns, and diagonals for a winner
-    for i in range(3):
-        if all(board[i][j] == 'O' for j in range(3)) or all(board[j][i] == 'O' for j in range(3)):
+        self.surface.blit(self.image, (self.rect.x, self.rect.y))
+
+        return action
+
+class TicTacToe:
+    def __init__(self):
+        pygame.init()
+        self.SCREEN_WIDTH = 399
+        self.SCREEN_HEIGHT = 399
+        self.screen = pygame.display.set_mode((self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
+        self.restart_img = pygame.image.load('D:\Python\Projects\Tic-Tac-Toe\images\RESTART.png').convert_alpha()
+        self.win_img = pygame.image.load('D:\Python\Projects\Tic-Tac-Toe\images\WIN.png').convert_alpha()
+        self.lose_img = pygame.image.load('D:\Python\Projects\Tic-Tac-Toe\images\LOSE.png').convert_alpha()
+        self.draw_img = pygame.image.load('D:\Python\Projects\Tic-Tac-Toe\images\DRAW.png').convert_alpha()
+        self.player_turn = True
+        self.isrunning = True
+        self.ispressed = False
+        self.clicked_circles = []
+        self.computer_clicked_crosses = []
+        self.board = [['' for _ in range(3)] for _ in range(3)]
+        self.restart_button = Button(self.screen, self.SCREEN_WIDTH / 2 - 60, self.SCREEN_HEIGHT / 2 + 50, self.restart_img, 120, 30)
+        self.player_turn_time = 0
+
+        self.win_screen = Button(self.screen, self.SCREEN_WIDTH / 2 - 150, self.SCREEN_HEIGHT / 2 - 100, self.win_img, 300, 100)
+        self.lose_screen = Button(self.screen, self.SCREEN_WIDTH / 2 - 150, self.SCREEN_HEIGHT / 2 - 100, self.lose_img, 300, 100)
+        self.draw_screen = Button(self.screen, self.SCREEN_WIDTH / 2 - 150, self.SCREEN_HEIGHT / 2 - 100, self.draw_img, 300, 100)
+
+    def check_winner(self):
+        for i in range(3):
+            if all(self.board[i][j] == 'O' for j in range(3)) or all(self.board[j][i] == 'O' for j in range(3)):
+                return "Player wins!"
+            elif all(self.board[i][j] == 'X' for j in range(3)) or all(self.board[j][i] == 'X' for j in range(3)):
+                return "Computer wins!"
+
+        if self.board[0][0] == self.board[1][1] == self.board[2][2] == 'O' or self.board[0][2] == self.board[1][1] == self.board[2][0] == 'O':
             return "Player wins!"
-        elif all(board[i][j] == 'X' for j in range(3)) or all(board[j][i] == 'X' for j in range(3)):
+        elif self.board[0][0] == self.board[1][1] == self.board[2][2] == 'X' or self.board[0][2] == self.board[1][1] == self.board[2][0] == 'X':
             return "Computer wins!"
 
-    if board[0][0] == board[1][1] == board[2][2] == 'O' or board[0][2] == board[1][1] == board[2][0] == 'O':
-        return "Player wins!"
-    elif board[0][0] == board[1][1] == board[2][2] == 'X' or board[0][2] == board[1][1] == board[2][0] == 'X':
-        return "Computer wins!"
+        return None
 
-    return None
+    def game_over(self):
+        winner = self.check_winner()
+        if winner:
+            pygame.draw.rect(self.screen, "black", (0, 0, self.SCREEN_HEIGHT, self.SCREEN_WIDTH))
+            # Display game over image
+            if winner == "Player wins!":
+                self.win_screen.draw()
+            elif winner == "Computer wins!":
+                self.lose_screen.draw()
+            else:
+                self.draw_screen.draw()
 
-# Initialize an empty 3x3 game board
-board = [['' for _ in range(3)] for _ in range(3)]
+            # Display restart button
+            if self.restart_button.draw():
+                # Clear game state for a new game
+                self.clicked_circles = []
+                self.computer_clicked_crosses = []
+                self.board = [['' for _ in range(3)] for _ in range(3)]
+                self.player_turn = True
+                self.ispressed = False
+                self.player_turn_time = 0
 
-while isrunning:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            isrunning = False
-        if event.type == pygame.MOUSEBUTTONDOWN and player_turn:
-            ispressed = True
-        if event.type == pygame.MOUSEBUTTONUP and player_turn:
-            ispressed = False
-            player_turn_time = pygame.time.get_ticks()
-    
-    screen.fill("black")
+    def run(self):
+        while self.isrunning:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.isrunning = False
+                if event.type == pygame.MOUSEBUTTONDOWN and self.player_turn:
+                    self.ispressed = True
+                if event.type == pygame.MOUSEBUTTONUP and self.player_turn:
+                    self.ispressed = False
+                    self.player_turn_time = pygame.time.get_ticks()
 
-    rects = [pygame.Rect(0, 0, 133, 133), pygame.Rect(0, 133, 133, 133), pygame.Rect(0, 266, 133, 133),
-             pygame.Rect(133, 0, 133, 133), pygame.Rect(266, 0, 133, 133), pygame.Rect(133, 266, 133, 133),
-             pygame.Rect(266, 133, 133, 133), pygame.Rect(266, 266, 133, 133), pygame.Rect(133, 133, 133, 133)]
+            self.screen.fill("black")
 
-    pygame.draw.line(screen, "white", (133, 0), (133, 399), 5)
-    pygame.draw.line(screen, "white", (266, 0), (266, 399), 5)
-    pygame.draw.line(screen, "white", (0, 133), (399, 133), 5)
-    pygame.draw.line(screen, "white", (0, 266), (399, 266), 5)
+            rects = [pygame.Rect(0, 0, 133, 133), pygame.Rect(0, 133, 133, 133), pygame.Rect(0, 266, 133, 133),
+                     pygame.Rect(133, 0, 133, 133), pygame.Rect(266, 0, 133, 133), pygame.Rect(133, 266, 133, 133),
+                     pygame.Rect(266, 133, 133, 133), pygame.Rect(266, 266, 133, 133), pygame.Rect(133, 133, 133, 133)]
 
-    for circle_pos in clicked_circles:
-        pygame.draw.circle(screen, (255, 255, 255), circle_pos, 50, 5)
+            pygame.draw.line(self.screen, "white", (133, 0), (133, 399), 5)
+            pygame.draw.line(self.screen, "white", (266, 0), (266, 399), 5)
+            pygame.draw.line(self.screen, "white", (0, 133), (399, 133), 5)
+            pygame.draw.line(self.screen, "white", (0, 266), (399, 266), 5)
 
-    for cross_pos in computer_clicked_crosses:
-        pygame.draw.line(screen, (255, 0, 0), (cross_pos[0] - 50, cross_pos[1] - 50), (cross_pos[0] + 50, cross_pos[1] + 50), 5)
-        pygame.draw.line(screen, (255, 0, 0), (cross_pos[0] - 50, cross_pos[1] + 50), (cross_pos[0] + 50, cross_pos[1] - 50), 5)
+            for circle_pos in self.clicked_circles:
+                pygame.draw.circle(self.screen, (255, 255, 255), circle_pos, 50, 5)
 
-    if player_turn and ispressed:
-        for rect in rects:
-            if rect.collidepoint(pygame.mouse.get_pos()) and rect.center not in clicked_circles and rect.center not in computer_clicked_crosses:
-                clicked_circles.append(rect.center)
-                player_turn = False
-                ispressed = False
-                player_turn_time = pygame.time.get_ticks()
+            for cross_pos in self.computer_clicked_crosses:
+                pygame.draw.line(self.screen, (255, 0, 0), (cross_pos[0] - 50, cross_pos[1] - 50),
+                                 (cross_pos[0] + 50, cross_pos[1] + 50), 5)
+                pygame.draw.line(self.screen, (255, 0, 0), (cross_pos[0] - 50, cross_pos[1] + 50),
+                                 (cross_pos[0] + 50, cross_pos[1] - 50), 5)
 
-                # Update the game board with player's move
-                row, col = rect.center[1] // 133, rect.center[0] // 133
-                board[row][col] = 'O'
+            if self.player_turn and self.ispressed:
+                for rect in rects:
+                    if rect.collidepoint(pygame.mouse.get_pos()) and rect.center not in self.clicked_circles and rect.center not in self.computer_clicked_crosses:
+                        self.clicked_circles.append(rect.center)
+                        self.player_turn = False
+                        self.ispressed = False
+                        self.player_turn_time = pygame.time.get_ticks()
 
-    if not player_turn and pygame.time.get_ticks() - player_turn_time > 1000:
-        available_rects = [rect for rect in rects if rect.center not in clicked_circles and rect.center not in computer_clicked_crosses]
-        if available_rects:
-            chosen_rect = random.choice(available_rects)
-            computer_clicked_crosses.append(chosen_rect.center)
-            player_turn = True
+                        row, col = rect.center[1] // 133, rect.center[0] // 133
+                        self.board[row][col] = 'O'
 
-            # Update the game board with computer's move
-            row, col = chosen_rect.center[1] // 133, chosen_rect.center[0] // 133
-            board[row][col] = 'X'
+            if not self.player_turn and pygame.time.get_ticks() - self.player_turn_time > 1000:
+                available_rects = [rect for rect in rects if rect.center not in self.clicked_circles and rect.center not in self.computer_clicked_crosses]
+                if available_rects:
+                    chosen_rect = random.choice(available_rects)
+                    self.computer_clicked_crosses.append(chosen_rect.center)
+                    self.player_turn = True
 
-    winner = check_winner(board)
-    if winner:
-        print(winner)
-        
-        isrunning = False
+                    row, col = chosen_rect.center[1] // 133, chosen_rect.center[0] // 133
+                    self.board[row][col] = 'X'
 
-    pygame.display.flip()
+            self.game_over()
 
-pygame.quit()
+            pygame.display.flip()
+
+        pygame.quit()
+
+if __name__ == "__main__":
+    game = TicTacToe()
+    game.run()
