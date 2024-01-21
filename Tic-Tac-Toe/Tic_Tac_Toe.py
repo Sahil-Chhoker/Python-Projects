@@ -32,10 +32,10 @@ class TicTacToe:
         self.SCREEN_WIDTH = 399
         self.SCREEN_HEIGHT = 399
         self.screen = pygame.display.set_mode((self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
-        self.restart_img = pygame.image.load('D:\Python\Projects\Tic-Tac-Toe\images\RESTART.png').convert_alpha()
-        self.win_img = pygame.image.load('D:\Python\Projects\Tic-Tac-Toe\images\WIN.png').convert_alpha()
-        self.lose_img = pygame.image.load('D:\Python\Projects\Tic-Tac-Toe\images\LOSE.png').convert_alpha()
-        self.draw_img = pygame.image.load('D:\Python\Projects\Tic-Tac-Toe\images\DRAW.png').convert_alpha()
+        self.restart_img = pygame.image.load('C:\MASTER FOLDER\Python-Projects\Tic-Tac-Toe\images\RESTART.png').convert_alpha()
+        self.win_img = pygame.image.load('C:\MASTER FOLDER\Python-Projects\Tic-Tac-Toe\images\WIN.png').convert_alpha()
+        self.lose_img = pygame.image.load('C:\MASTER FOLDER\Python-Projects\Tic-Tac-Toe\images\LOSE.png').convert_alpha()
+        self.draw_img = pygame.image.load('C:\MASTER FOLDER\Python-Projects\Tic-Tac-Toe\images\DRAW.png').convert_alpha()
         self.player_turn = True
         self.isrunning = True
         self.ispressed = False
