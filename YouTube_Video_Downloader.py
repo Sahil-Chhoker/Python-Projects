@@ -15,7 +15,7 @@ if user_input.lower() == "yes":
 
     if yd is not None:
         print(f"Downloading '{yt.title}' with resolution {resolution}...")
-        yd.download('D:\Python\Test')
+        yd.download('C:\MASTER FOLDER\Python-Projects\Test')
         print("Download complete!")
     else:
         print(f"No stream found with resolution {resolution}.")
