@@ -155,7 +155,7 @@ def download():
                              fg='black', command=lambda: download_songs(selected_playlist.get()))
     download_button.pack()
         # add a note in the bottom corner
-    credit = Label(canvas, text="by: NOKO", font=('Arial', 8), fg='white', background='#4A4A4A')
+    credit = Label(canvas, text="Sahil", font=('Arial', 8), fg='white', background='#4A4A4A')
     credit.place(relx=1, rely=1, anchor='se')
 
 
