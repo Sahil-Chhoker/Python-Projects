@@ -6,12 +6,17 @@ WIDTH, HEIGHT = 800, 800
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Planet Simulation")
 
+WHITE = (255, 255, 255)
+YELLOW = (255, 255, 0)
+BLUE = (100, 149, 237)
+RED = (188, 39, 50)
+
 class Planet():
     AU = 149.6e6 * 1000
     G = 6.67428e-11
-    SCALE = 250/AU
-    TIMESTEP = 3600 * 24
-    
+    SCALE = 250/AU # 1AU = 100 pixels
+    TIMESTEP = 3600 * 24 # 1 day
+
     def __init__(self, x, y, radius, color, mass):
         self.x = x
         self.y = y
