@@ -25,7 +25,7 @@ class Planet():
         self.mass = mass
 
         self.orbit = []
-        self.sun = False
+        self.is_sun = False
         self.disrance_to_sun = 0
 
         self.x_vel = 0
@@ -41,8 +41,11 @@ def main():
     clock = pygame.time.Clock()
 
     sun = Planet(0, 0, 30, YELLOW, 1.98892 * 10**30)
+    sun.is_sun = True
 
-    planets = [sun]
+    earth = Planet(-1 * Planet.AU, 0, 16, BLUE, 5.9742 * 10**24)
+
+    planets = [sun, earth]
 
     while run:
         clock.tick(60)
