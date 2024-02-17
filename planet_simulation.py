@@ -22,6 +22,19 @@ class Planet():
         self.y_vel = 0
 
 def main():
-    pass
+    run = True
+    clock = pygame.time.Clock()
+
+    while run:
+        clock.tick(60)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+
+
+        pygame.display.update()
+    
+    pygame.quit()
 
 main()
