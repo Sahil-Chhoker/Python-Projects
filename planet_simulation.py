@@ -40,6 +40,10 @@ def main():
     run = True
     clock = pygame.time.Clock()
 
+    sun = Planet(0, 0, 30, YELLOW, 1.98892 * 10**30)
+
+    planets = [sun]
+
     while run:
         clock.tick(60)
 
@@ -47,6 +51,8 @@ def main():
             if event.type == pygame.QUIT:
                 run = False
 
+        for planet in planets:
+            planet.draw(WIN)
 
         pygame.display.update()
     
