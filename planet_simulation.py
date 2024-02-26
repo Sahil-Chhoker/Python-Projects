@@ -100,6 +100,7 @@ def main():
                 run = False
 
         for planet in planets:
+            planet.update_position(planets)
             planet.draw(WIN)
 
         pygame.display.update()
