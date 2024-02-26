@@ -56,7 +56,7 @@ class Planet:
 		
 		if not self.sun:
 			distance_text = FONT.render(f"{round(self.distance_to_sun/1000, 1)}km", 1, WHITE)
-			win.blit(distance_text, (x - distance_text.get_width()/2, y - distance_text.get_height()/2))
+			win.blit(distance_text, (x - distance_text.get_width()/2, y - distance_text.get_height() * 1.5))
 
     # attraction logic
 	def attraction(self, other):
