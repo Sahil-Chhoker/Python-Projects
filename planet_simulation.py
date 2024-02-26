@@ -30,7 +30,7 @@ class Planet():
 
         self.orbit = []
         self.is_sun = False
-        self.disrance_to_sun = 0
+        self.distance_to_sun = 0
 
         self.x_vel = 0
         self.y_vel = 0
@@ -40,6 +40,21 @@ class Planet():
         x = self.x * self.SCALE + WIDTH/2
         y = self.y * self.SCALE + HEIGHT/2
         pygame.draw.circle(win, self.color, (x, y), self.radius)
+
+    def attracrtion(self, other):
+        other_x, other_y = other.x, other.y
+        distance_x = other_x - self.x
+        distance_y = other_y - self.y
+        distance = math.sqrt(distance_x ** 2 + distance_y ** 2)
+
+        if other.is_sun:
+            self.distance_to_sun = distance
+        
+        force = self.G * self.mass * other.mass / distance**2
+        theta = math.atan2(distance_y, distance_x)
+        force_x = math.cos(theta) * force
+        force_y = math.sin(theta) * force
+        return force_x, force_y
 
 def main():
     run = True
