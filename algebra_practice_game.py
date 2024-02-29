@@ -46,7 +46,7 @@ def main():
                 break
             else:
                 print("You are wrong. Let's try another problem.")
-                break  # Exit the current loop to generate new equations
+                break
 
         play_again = input("Do you want to play again? (yes/no): ")
         if play_again.lower() != "yes":
