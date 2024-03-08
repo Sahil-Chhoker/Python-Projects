@@ -4,6 +4,8 @@ from tkinter.filedialog import askopenfilename
 from PIL import Image, ImageTk
 
 class SpriteRenderer(): 
+    SAVE_PATH = 'C:\MASTER FOLDER\Python-Projects\Sprite Renderer\dino'
+
     def __init__(self, root):
         self.root = root
         self.root.title("Sprite Renderer")
@@ -53,7 +55,7 @@ class SpriteRenderer():
         if self.selected_image and self.selections:
             for i, sel in enumerate(self.selections):
                 selection_img = self.selected_image.crop(sel)
-                selection_img.save(f"selection_{i}.png")
+                selection_img.save(f"{self.SAVE_PATH}\selection_{i}.png")
 
 if __name__ == "__main__":
     root = Tk()
