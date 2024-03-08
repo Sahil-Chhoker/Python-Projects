@@ -1,7 +1,8 @@
 import os
 import cv2 as cv
 
-image_path = 'C:\MASTER FOLDER\Python-Projects\Image Slitter\db35jhmr.png'
+filename = 'dino_assets.png'
+image_path = f'C:\MASTER FOLDER\Python-Projects\Image Slitter\{filename}'
 save_path = 'C:\MASTER FOLDER\Python-Projects\Image Slitter'
 sprite = cv.imread(image_path)
 im_length, im_width, im_channel = sprite.shape
@@ -19,7 +20,7 @@ if step == 0:
             i += 1
     except:
         print("All files are sucessfully deleted")
-        
+
 else:
     for i in range(0, im_width, step):
         crop_sprite = sprite[0:im_length, i:i+step]
