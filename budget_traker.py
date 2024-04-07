@@ -1,4 +1,3 @@
-
 import json
 
 def add_expense(expenses, description, amount):
@@ -25,7 +24,7 @@ def load_budget_data(filepath):
             data = json.load(file)
             return data['initial_budget'], data['expenses']
     except (FileNotFoundError, json.JSONDecodeError):
-        return 0, []  # Return default values if the file doesn't exist or is empty/corrupted
+        return 0, [] 
     
 def save_budget_data(filepath, initial_budget, expenses):
     data = {
@@ -38,7 +37,7 @@ def save_budget_data(filepath, initial_budget, expenses):
 
 def main():
     print("Welcome to the Budget App")
-    filepath = 'budget_data.json'
+    filepath = 'budget_data_sahil.json'
     initial_budget, expenses = load_budget_data(filepath)
     if initial_budget == 0:
         initial_budget = float(input("Please enter your initial amount: "))
@@ -59,7 +58,7 @@ def main():
             show_budget_details(budget, expenses)
         elif choice == "3":
             save_budget_data(filepath, initial_budget, expenses)
-            print("Exiting Budget App. Goodbye!")
+            print("Exiting Budget App...")
             break
         else:
             print("Invalid choice, please choose again.")
