@@ -1,5 +1,6 @@
 .env
 .cache
+.vscode
 budget_data_sahil.json
 Encoding Test
 db35jhmr.png
