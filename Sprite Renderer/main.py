@@ -1,11 +1,8 @@
-import os
 from tkinter import Tk, Button, Canvas
-from tkinter.filedialog import askopenfilename
+from tkinter.filedialog import askopenfilename, asksaveasfilename
 from PIL import Image, ImageTk
 
 class SpriteRenderer(): 
-    SAVE_PATH = 'C:\MASTER FOLDER\Python-Projects\Sprite Renderer\dino'
-
     def __init__(self, root):
         self.root = root
         self.root.title("Sprite Renderer")
@@ -53,9 +50,11 @@ class SpriteRenderer():
 
     def save_selections(self):
         if self.selected_image and self.selections:
-            for i, sel in enumerate(self.selections):
-                selection_img = self.selected_image.crop(sel)
-                selection_img.save(f"{self.SAVE_PATH}\selection_{i}.png")
+            output_file = asksaveasfilename(defaultextension=".png", filetypes=[("PNG files", "*.png")])
+            if output_file:
+                for i, sel in enumerate(self.selections):
+                    selection_img = self.selected_image.crop(sel)
+                    selection_img.save(output_file + f"_selection_{i}.png")
 
 if __name__ == "__main__":
     root = Tk()
