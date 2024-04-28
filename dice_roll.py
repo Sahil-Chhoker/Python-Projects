@@ -19,7 +19,12 @@ def main():
                 print("Thanks for playing!")
                 break
 
-            print(*roll_dice(int(user_input)), sep=', ')
+            sum = 0
+            result = roll_dice(int(user_input))
+            for elem in result:
+                sum += elem
+            print(*result, sep=', ')
+            print(f"The sum of all the dice rolls comes out to be : {sum}\n\n")
         except ValueError:
             print("Please enter an valid integer!")
             continue
